@@ -6,6 +6,8 @@
         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
+    <context:property-placeholder location="classpath:properties/dao.properties"/>
+
     <!-- 配置数据源 -->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
@@ -49,9 +51,14 @@
         <property name="configLocation" value="classpath:spring/mybatis.xml"/>
 
         <!-- 扫描javabean,自动使用别名 -->
-        <property name="typeAliasesPackage" value="com.miller.**.bean"/>
+        <property name="typeAliasesPackage" value="com.miller.bean"/>
 
-        <!-- 扫描mybatis的sql配置文件 -->
+        <!-- 扫描mybatis的sql配置文件-->
         <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="com.miller.**.dao"/>
     </bean>
 </beans>

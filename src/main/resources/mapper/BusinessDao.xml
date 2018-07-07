@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miller.dao.BusinessDao">
+    <insert id="insert" parameterType="com.miller.bean.Business">
+        insert into business(img_file_name,title,subtitle,price,distance,number,`desc`,city,category,star_total_num,comment_total_num)
+        values(#{imgFileName},#{title},#{subtitle},#{price},#{distance},#{number},#{desc},#{city},#{category},#{starTotalNum},#{commentTotalNum})
+    </insert>
+
+    <select id="selectById" resultType="com.miller.bean.Business" parameterType="long">
+        select
+        id,img_file_name,title,subtitle,price,distance,number,`desc`,city,category,star_total_num,comment_total_num
+        from business where id = #{id}
+    </select>
+
+</mapper>
