@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Created by miller on 2018/7/7
+ * 广告控制器
  */
 @Controller
 @RequestMapping(value = "/ad")

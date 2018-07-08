@@ -13,9 +13,14 @@ import java.util.List;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BusinessListDto {
-
+    /**
+     * 是否有更多
+     */
     private boolean hasMore;
 
+    /**
+     * 商家DTO LIST
+     */
     private List<BusinessDto> data;
 
     public BusinessListDto() {

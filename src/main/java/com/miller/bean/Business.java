@@ -6,6 +6,7 @@ import lombok.Setter;
 
 /**
  * Created by miller on 2018/7/5
+ * 商家bean对象
  */
 @Getter
 @Setter

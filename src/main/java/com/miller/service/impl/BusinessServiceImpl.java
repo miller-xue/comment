@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * Created by miller on 2018/7/7
+ * 商家Service
  */
 @Service
 public class BusinessServiceImpl implements BusinessService {
@@ -31,8 +32,7 @@ public class BusinessServiceImpl implements BusinessService {
     @Autowired
     private BusinessConfig businessConfig;
 
-    @Autowired
-    private FileUtils fileUtils;
+
 
 
     public BusinessDto getById(Long id) {
@@ -51,7 +51,7 @@ public class BusinessServiceImpl implements BusinessService {
         // 获取文件对象
         if (businessDto.getImgFile() != null && businessDto.getImgFile().getSize() > 0) {
             try {
-                String imgFileName = fileUtils.save(businessDto.getImgFile(), businessConfig.getSavePath());
+                String imgFileName = FileUtils.save(businessDto.getImgFile(), businessConfig.getSavePath());
                 business.setImgFileName(imgFileName);
                 // 默认已售数量为0
                 business.setNumber(0);
@@ -76,8 +76,8 @@ public class BusinessServiceImpl implements BusinessService {
         try {
             if (businessDto.getImgFile() != null && businessDto.getImgFile().getSize() > 0) {
                 // 删掉旧图片
-                String imgFileName = fileUtils.save(businessDto.getImgFile(), businessConfig.getSavePath());
-                fileUtils.removeFile(businessConfig.getSavePath(),businessDto.getImgFileName());
+                String imgFileName = FileUtils.save(businessDto.getImgFile(), businessConfig.getSavePath());
+                FileUtils.removeFile(businessConfig.getSavePath(),businessDto.getImgFileName());
                 business.setImgFileName(imgFileName);
             }
             businessDao.update(business);

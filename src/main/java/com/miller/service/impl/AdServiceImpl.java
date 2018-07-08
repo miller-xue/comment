@@ -5,6 +5,7 @@ import com.miller.config.AdConfig;
 import com.miller.dao.AdDao;
 import com.miller.dto.AdDto;
 import com.miller.service.AdService;
+import com.miller.util.FileUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 
 /**
  * Created by miller on 2018/7/7
+ * 广告Service
  */
 @Service
 public class AdServiceImpl implements AdService {
@@ -32,24 +34,27 @@ public class AdServiceImpl implements AdService {
         ad.setLink(adDto.getLink());
         ad.setWeight(adDto.getWeight());
         ad.setId(adDto.getId());
-        if(adDto.getImgFile() != null && adDto.getImgFile().getSize() > 0){
-            File fileFolder = new File(adConfig.getSavePath());
-            if (!fileFolder.exists()) {
-                fileFolder.mkdirs();
-            }
-            String imgFileName = System.currentTimeMillis() + "_" + adDto.getImgFile().getOriginalFilename();
-            File file = new File(fileFolder, imgFileName);
+        if (adDto.getImgFile() != null && adDto.getImgFile().getSize() > 0) {
+
+//            File fileFolder = new File(adConfig.getSavePath());
+//            if (!fileFolder.exists()) {
+//                fileFolder.mkdirs();
+//            }
+//            String imgFileName = System.currentTimeMillis() + "_" + adDto.getImgFile().getOriginalFilename();
+//            File file = new File(fileFolder, imgFileName);
+            //adDto.getImgFile().transferTo(file);
             try {
-                adDto.getImgFile().transferTo(file);
+
+                String imgFileName = FileUtils.save(adDto.getImgFile(), adConfig.getSavePath());
                 ad.setImgFileName(imgFileName);
                 adDao.insert(ad);
-
                 return true;
             } catch (IOException e) {
                 // TODO
+                e.printStackTrace();
                 return false;
             }
-        }else {
+        } else {
             return false;
         }
     }

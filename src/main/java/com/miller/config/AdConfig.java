@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Created by miller on 2018/7/7
+ * 广告类常量
  */
 
 @Component

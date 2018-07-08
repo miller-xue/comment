@@ -1,7 +1,5 @@
 package com.miller.controller.api;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.miller.config.AdConfig;
 import com.miller.config.BusinessConfig;
 import com.miller.dto.AdDto;
@@ -21,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 手机端APi
  * Created by miller on 2018/7/5
  */
 @RestController

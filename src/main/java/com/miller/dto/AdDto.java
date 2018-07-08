@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Created by miller on 2018/7/7
+ * 广告DTO
  */
 
 @Data

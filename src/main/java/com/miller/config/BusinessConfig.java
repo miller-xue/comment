@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Created by miller on 2018/7/8
+ * 商家常量
  */
 @Component
 @Getter

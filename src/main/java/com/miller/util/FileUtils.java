@@ -10,10 +10,9 @@ import java.io.IOException;
 /**
  * Created by miller on 2018/7/8
  */
-@Component
 public class FileUtils {
 
-    public String save(MultipartFile multipartFile, String savePath) throws IOException {
+    public static String save(MultipartFile multipartFile, String savePath) throws IOException {
         File path = new File(savePath);
         if (!path.exists()) {
             path.mkdirs();
@@ -25,7 +24,7 @@ public class FileUtils {
     }
 
 
-    public void removeFile(String path,String fileName) {
+    public static void removeFile(String path,String fileName) {
         File file = new File(path, fileName);
         file.deleteOnExit();
     }

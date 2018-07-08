@@ -5,6 +5,7 @@ import lombok.Getter;
 
 /**
  * Created by miller on 2018/7/7
+ * 系统枚举
  */
 
 @Getter

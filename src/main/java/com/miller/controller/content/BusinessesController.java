@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Created by miller on 2018/7/7
+ * 商家控制器
  */
 @Controller
 @RequestMapping(value = "/businesses")

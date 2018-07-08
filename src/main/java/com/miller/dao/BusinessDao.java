@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * Created by miller on 2018/7/7
+ * 商家DAo
  */
 public interface BusinessDao {
 
