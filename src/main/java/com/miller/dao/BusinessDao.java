@@ -17,6 +17,13 @@ public interface BusinessDao {
     int insert(Business business);
 
     /**
+     * 修改
+     * @param business 商户表对象
+     * @return 影响行数
+     */
+    int update(Business business);
+
+    /**
      *  根据主键查询商户
      * @param id 主键
      * @return 商户对象
@@ -29,5 +36,9 @@ public interface BusinessDao {
      * @return 商户列表
      */
     List<Business> selectByPage(Business business);
+
+
+
+    List<Business> selectLikeByPage(Business business);
 
 }

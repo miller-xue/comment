@@ -1,7 +1,7 @@
 package com.miller.service.impl;
 
 import com.miller.bean.Ad;
-import com.miller.config.ImageConfig;
+import com.miller.config.AdConfig;
 import com.miller.dao.AdDao;
 import com.miller.dto.AdDto;
 import com.miller.service.AdService;
@@ -20,7 +20,7 @@ import java.util.List;
 public class AdServiceImpl implements AdService {
 
     @Autowired
-    private ImageConfig imageConfig;
+    private AdConfig adConfig;
 
     @Autowired
     private AdDao adDao;
@@ -33,7 +33,7 @@ public class AdServiceImpl implements AdService {
         ad.setWeight(adDto.getWeight());
         ad.setId(adDto.getId());
         if(adDto.getImgFile() != null && adDto.getImgFile().getSize() > 0){
-            File fileFolder = new File(imageConfig.getSavePath());
+            File fileFolder = new File(adConfig.getSavePath());
             if (!fileFolder.exists()) {
                 fileFolder.mkdirs();
             }
@@ -64,7 +64,7 @@ public class AdServiceImpl implements AdService {
         for (Ad ad : adList) {
             AdDto adDtoTemp = new AdDto();
             result.add(adDtoTemp);
-            adDtoTemp.setImg(imageConfig.getUrl() + ad.getImgFileName());
+            adDtoTemp.setImg(adConfig.getUrl() + ad.getImgFileName());
             BeanUtils.copyProperties(ad,adDtoTemp);
         }
         return result;

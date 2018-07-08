@@ -1,6 +1,7 @@
 package com.miller.controller.content;
 
 import com.miller.constant.DicTypeConst;
+import com.miller.constant.PageCodeEnum;
 import com.miller.dto.BusinessDto;
 import com.miller.service.BusinessService;
 import com.miller.service.DicService;
@@ -28,7 +29,9 @@ public class BusinessesController {
      * 商户列表
      */
     @RequestMapping(method = RequestMethod.GET)
-    public String search() {
+    public String search(Model model, BusinessDto businessDto) {
+        model.addAttribute("searchParam", businessDto);
+        model.addAttribute("list", service.searchByPage(businessDto));
         return "content/businessList";
     }
 
@@ -41,6 +44,7 @@ public class BusinessesController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public String remove(@PathVariable("id") Long id) {
         System.out.println(id);
+        //TODO
         return "content/businessList";
     }
 
@@ -50,7 +54,9 @@ public class BusinessesController {
      * @return
      */
     @RequestMapping(value = "/addPage", method = RequestMethod.GET)
-    public String addInit() {
+    public String addInit(Model model) {
+        model.addAttribute("cityList",dicService.getListByType(DicTypeConst.CITY));
+        model.addAttribute("categoryList",dicService.getListByType(DicTypeConst.CATEGORY));
         return "content/businessAdd";
     }
 
@@ -61,8 +67,13 @@ public class BusinessesController {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST)
-    public String add(BusinessDto dto) {
-        return "content/businessAdd";
+    public String add(BusinessDto dto, Model model) {
+        if (service.add(dto)) {
+            model.addAttribute(PageCodeEnum.KEY, PageCodeEnum.ADD_SUCCESS);
+        } else {
+            model.addAttribute(PageCodeEnum.KEY, PageCodeEnum.ADD_FAIL);
+        }
+        return "redirect:/businesses";
     }
 
     /**
@@ -77,7 +88,6 @@ public class BusinessesController {
         model.addAttribute("cityList",dicService.getListByType(DicTypeConst.CITY));
         model.addAttribute("categoryList",dicService.getListByType(DicTypeConst.CATEGORY));
         model.addAttribute("modifyObj", service.getById(id));
-
         return "content/businessModify";
     }
 
@@ -88,7 +98,12 @@ public class BusinessesController {
      * @return
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public String modify(@PathVariable("id") Long id, BusinessDto businessDto) {
-        return "content/businessModify";
+    public String modify(@PathVariable("id") Long id, BusinessDto businessDto,Model model) {
+        if (service.update(businessDto)) {
+            model.addAttribute(PageCodeEnum.KEY, PageCodeEnum.ADD_SUCCESS);
+        } else {
+            model.addAttribute(PageCodeEnum.KEY, PageCodeEnum.ADD_FAIL);
+        }
+        return "redirect:/businesses";
     }
 }

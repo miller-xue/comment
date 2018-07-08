@@ -55,12 +55,14 @@
 										<td>${item.cityDic.name}</td>
 										<td>${item.categoryDic.name}</td>
 										<td>
-											<t:auth url="/businesses/${item.id}" method="PUT">
-												<a href="javascript:void(0);" onclick="modifyInit('${item.id}')">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
-											</t:auth>
-											<t:auth url="/businesses/${item.id}" method="DELETE">
-												<a href="javascript:void(0);" onclick="remove('${item.id}')">删除</a>
-											</t:auth>
+											<a href="javascript:void(0);" onclick="modifyInit('${item.id}')">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+											<a href="javascript:void(0);" onclick="remove('${item.id}')">删除</a>
+											<%--<t:auth url="/businesses/${item.id}" method="PUT">--%>
+												<%--<a href="javascript:void(0);" onclick="modifyInit('${item.id}')">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;--%>
+											<%--</t:auth>--%>
+											<%--<t:auth url="/businesses/${item.id}" method="DELETE">--%>
+												<%--<a href="javascript:void(0);" onclick="remove('${item.id}')">删除</a>--%>
+											<%--</t:auth>--%>
 										</td>
 									</tr>
 								</c:forEach>

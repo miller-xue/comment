@@ -2,12 +2,14 @@ package com.miller.controller.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.miller.bean.BusinessList;
 import com.miller.config.AdConfig;
+import com.miller.config.BusinessConfig;
 import com.miller.dto.AdDto;
+import com.miller.dto.BusinessDto;
+import com.miller.dto.BusinessListDto;
 import com.miller.service.AdService;
+import com.miller.service.BusinessService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +33,12 @@ public class ApiController {
     @Autowired
     private AdService adService;
 
+    @Autowired
+    private BusinessService businessService;
+
+    @Autowired
+    private BusinessConfig businessConfig;
+
     /**
      * 首页 —— 广告（超值特惠）
      *
@@ -50,33 +58,28 @@ public class ApiController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/homelist/{city}/{page}", method = RequestMethod.GET)
-    public BusinessList homelist() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        String s = "{\"hasMore\":true,\"data\":[{\"img\":\"http://images2015.cnblogs.com/blog/138012/201610/138012-20161016201638030-473660627.png\",\"title\":\"汉堡大大\",\"subTitle\":\"叫我汉堡大大，还你多彩口味\",\"price\":\"28\",\"distance\":\"120m\",\"mumber\":\"389\",\"id\":\"8708146484409796\"},{\"img\":\"http://images2015.cnblogs.com/blog/138012/201610/138012-20161016201645858-1342445625.png\",\"title\":\"北京开源饭店\",\"subTitle\":\"[望京]自助晚餐\",\"price\":\"98\",\"distance\":\"140m\",\"mumber\":\"689\",\"id\":\"6214259783210612\"},{\"img\":\"http://images2015.cnblogs.com/blog/138012/201610/138012-20161016201652952-1050532278.png\",\"title\":\"服装定制\",\"subTitle\":\"原价xx元，现价xx元，可修改一次\",\"price\":\"1980\",\"distance\":\"160\",\"mumber\":\"106\",\"id\":\"022246982410528915\"},{\"img\":\"http://images2015.cnblogs.com/blog/138012/201610/138012-20161016201700186-1351787273.png\",\"title\":\"婚纱摄影\",\"subTitle\":\"免费试穿，拍照留念\",\"price\":\"2899\",\"distance\":\"160\",\"mumber\":\"58\",\"id\":\"9906988578254157\"},{\"img\":\"http://images2015.cnblogs.com/blog/138012/201610/138012-20161016201708124-1116595594.png\",\"title\":\"麻辣串串烧\",\"subTitle\":\"双人免费套餐等你抢购\",\"price\":\"0\",\"distance\":\"160\",\"mumber\":\"1426\",\"id\":\"23579379621990926\"}]}";
-        return mapper.readValue(s, new TypeReference<BusinessList>() {
-        });
+    @RequestMapping(value = "/homelist/{city}/{page.currentPage}", method = RequestMethod.GET)
+    public BusinessListDto homelist(BusinessDto businessDto) throws IOException {
+        businessDto.getPage().setPageNumber(businessConfig.getHomeNumber());
+        return businessService.searchByPageForApi(businessDto);
     }
 
     /**
      * // 搜索结果页 - 搜索结果 - 四个参数
      */
-    @RequestMapping(value = "/search/{page}/{city}/{category}/{keyword}", method = RequestMethod.GET)
-    public void search(@PathVariable(value = "page") String page,
-                       @PathVariable(value = "city") String city,
-                       @PathVariable(value = "category") String category,
-                       @PathVariable(value = "keyword") String keyword) {
-
+    @RequestMapping(value = "/search/{page.currentPage}/{city}/{category}/{keyword}", method = RequestMethod.GET)
+    public BusinessListDto searchByKeyword(BusinessDto businessDto) {
+        businessDto.getPage().setPageNumber(businessConfig.getSearchNumber());
+        return businessService.searchByPageForApi(businessDto);
     }
 
     /**
      * // 搜索结果页 - 搜索结果 - 三个参数
      */
-    @RequestMapping(value = "/search/{page}/{city}/{category}", method = RequestMethod.GET)
-    public void search(@PathVariable(value = "page") String page,
-                       @PathVariable(value = "city") String city,
-                       @PathVariable(value = "category") String category) {
-
+    @RequestMapping(value = "/search/{page.currentPage}/{city}/{category}", method = RequestMethod.GET)
+    public BusinessListDto search(BusinessDto businessDto) {
+        businessDto.getPage().setPageNumber(businessConfig.getSearchNumber());
+        return businessService.searchByPageForApi(businessDto);
     }
 
     /**
@@ -85,8 +88,8 @@ public class ApiController {
      * @param id
      */
     @RequestMapping(value = "/detail/info/{id}", method = RequestMethod.GET)
-    public void detailInfo(@PathVariable(value = "id") String id) {
-
+    public BusinessDto detailInfo(@PathVariable(value = "id") Long id) {
+        return businessService.getById(id);
     }
 
     /**

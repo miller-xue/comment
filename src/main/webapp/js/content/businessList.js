@@ -3,9 +3,11 @@ function remove(id) {
 	$("#mainForm").submit();
 }
 
-function search() {
+function search(currentPage) {
 	$("#mainForm").attr("method","GET");
+
 	$("#mainForm").attr("action",$("#basePath").val() + "/businesses");
+    $("#currentPage").val(currentPage);
 	$("#mainForm").submit();
 }
 

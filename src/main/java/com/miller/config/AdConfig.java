@@ -12,6 +12,14 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter
 public class AdConfig {
+
     @Value("${ad.number}")
     private int adNumber;
+
+
+    @Value("${ad.image.savePath}")
+    private String savePath;
+
+    @Value("${ad.image.url}")
+    private String url;
 }

@@ -1,12 +1,14 @@
 package com.miller.bean;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by miller on 2018/7/5
  */
-@Data
+@Getter
+@Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Business extends BaseBean {
     private Long id;
@@ -40,5 +42,11 @@ public class Business extends BaseBean {
     private Long starTotalNum;
 
     private Long commentTotalNum;
+
+
+
+    private Dic cityDic;
+
+    private Dic categoryDic;
 
 }
