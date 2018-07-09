@@ -25,8 +25,10 @@ public class MemberServiceImpl implements MemberService {
     private MemberDao memberDao;
 
     public boolean exists(Long phone) {
+        // 封装查询条件
         Member member = new Member();
         member.setPhone(phone);
+
         List<Member> members = memberDao.select(member);
         return members != null && members.size() == 1;
     }

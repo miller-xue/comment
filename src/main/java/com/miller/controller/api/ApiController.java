@@ -143,7 +143,7 @@ public class ApiController {
         String saveCode = memberService.getCode(phone);
         if (saveCode != null) {
             // 2、如果校验通过，生成一个32位的token
-            if (MD5Util.getMD5(code).equals(saveCode)) {
+            if (code.equals(saveCode)) {
                 String token = CommonUtil.getUUID();
                 memberService.saveToken(token, phone);
                 // 4.把Token返回给前端

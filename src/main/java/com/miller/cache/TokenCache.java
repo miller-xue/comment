@@ -32,7 +32,7 @@ public class TokenCache {
      * @param phone 手机号
      */
     public void save(String token, Long phone) {
-	tokenMap.put(token, phone);
+	    tokenMap.put(token, phone);
     }
 
     /**
