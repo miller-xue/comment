@@ -2,16 +2,18 @@ package com.miller.controller.api;
 
 import com.miller.config.AdConfig;
 import com.miller.config.BusinessConfig;
+import com.miller.constant.ApiCodeEnum;
 import com.miller.dto.AdDto;
+import com.miller.dto.ApiCodeDto;
 import com.miller.dto.BusinessDto;
 import com.miller.dto.BusinessListDto;
 import com.miller.service.AdService;
 import com.miller.service.BusinessService;
+import com.miller.service.MemberService;
+import com.miller.util.CommonUtil;
+import com.miller.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,6 +39,9 @@ public class ApiController {
 
     @Autowired
     private BusinessConfig businessConfig;
+
+    @Autowired
+    private MemberService memberService;
 
     /**
      * 首页 —— 广告（超值特惠）
@@ -132,11 +137,25 @@ public class ApiController {
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Map<String, Object> login() {
-        Map<String, Object> result = new HashMap<String, Object>();
-        result.put("errno", 1);
-        result.put("msg", "loing not ok");
-        return result;
+    public ApiCodeDto login(@RequestParam("username") Long phone, @RequestParam("code") String code) {
+        ApiCodeDto result = null;
+        // 1、用手机号取出保存的md5(6位随机数)，能取到，并且与提交上来的code值相同为校验通过
+        String saveCode = memberService.getCode(phone);
+        if (saveCode != null) {
+            // 2、如果校验通过，生成一个32位的token
+            if (MD5Util.getMD5(code).equals(saveCode)) {
+                String token = CommonUtil.getUUID();
+                memberService.saveToken(token, phone);
+                // 4.把Token返回给前端
+                result = new ApiCodeDto(ApiCodeEnum.SUCCESS.getErrno(), token);
+            }else {
+                result = new ApiCodeDto(ApiCodeEnum.CODE_ERROR);
+            }
+        }else {
+            result = new ApiCodeDto(ApiCodeEnum.CODE_INVALID);
+        }
+
+        return null;
     }
 
     /**
@@ -145,12 +164,28 @@ public class ApiController {
      * @return
      */
     @RequestMapping(value = "/sms", method = RequestMethod.POST)
-    public Map<String, Object> sms() {
-        Map<String, Object> result = new HashMap<String, Object>();
-        result.put("errno", 0);
-        result.put("msg", "lok");
-        result.put("code", "123456");
-        return result;
+    public ApiCodeDto sms(@RequestParam("username") Long phone) {
+        ApiCodeDto apiCodeDto = null;
+        // 1.验证手机是否存在(是否注册)
+        if (memberService.exists(phone)) {
+            // 2.生成6位随机数
+            String code = String.valueOf(CommonUtil.random(6));
+            // 3.保存手机号与对应的md5(6位随机数)(一般保存1分钟)
+            if (memberService.saveCode(phone, code)) {
+                // 4、调用短信通道，将明文6位随机数发送到对应的手机上。
+                if (memberService.sendCode(phone, code)) {
+                    apiCodeDto = new ApiCodeDto(ApiCodeEnum.SUCCESS.getErrno(), code);
+                }else {
+                    apiCodeDto = new ApiCodeDto(ApiCodeEnum.SEND_FAIL);
+                }
+            }else {
+                apiCodeDto = new ApiCodeDto(ApiCodeEnum.REPEAT_REQUEST);
+            }
+        }else {
+            apiCodeDto = new ApiCodeDto(ApiCodeEnum.USER_NOT_EXISTS);
+        }
+
+        return apiCodeDto;
     }
 
 

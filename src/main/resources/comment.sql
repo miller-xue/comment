@@ -36,3 +36,15 @@ CREATE TABLE `dic` (
   `weight` int(11) DEFAULT NULL,
   PRIMARY KEY (`type`,`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- 用户表
+CREATE TABLE `member` (
+  `id` int (11) NOT NULL,
+  `phone` bigint(13) DEFAULT NULL COMMENT '手机号',
+  `name` varchar(16) DEFAULT NULL COMMENT '用户名',
+  `password` char(32) DEFAULT NULL COMMENT '密码',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `phone_unique`(`phone`),
+  UNIQUE KEY `name_unique`(`name`)
+)ENGINE = InnoDB DEFAULT CHARSET=utf8
