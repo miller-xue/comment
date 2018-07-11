@@ -3,13 +3,11 @@ package com.miller.controller.api;
 import com.miller.config.AdConfig;
 import com.miller.config.BusinessConfig;
 import com.miller.constant.ApiCodeEnum;
-import com.miller.dto.AdDto;
-import com.miller.dto.ApiCodeDto;
-import com.miller.dto.BusinessDto;
-import com.miller.dto.BusinessListDto;
+import com.miller.dto.*;
 import com.miller.service.AdService;
 import com.miller.service.BusinessService;
 import com.miller.service.MemberService;
+import com.miller.service.OrdersService;
 import com.miller.util.CommonUtil;
 import com.miller.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +40,9 @@ public class ApiController {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private OrdersService ordersService;
 
     /**
      * 首页 —— 广告（超值特惠）
@@ -124,10 +125,29 @@ public class ApiController {
      * @return
      */
     @RequestMapping(value = "/order", method = RequestMethod.POST)
-    public Map<String, Object> buy() {
-        Map<String, Object> result = new HashMap<String, Object>();
-        result.put("errno", 0);
-        result.put("msg", "buy ok");
+    public ApiCodeDto order(OrderForBuyDto orderForBuyDto) {
+        ApiCodeDto result = null;
+
+        Long phone = memberService.getPhone(orderForBuyDto.getToken());
+        // 查询商家
+        BusinessDto businessDto = businessService.getById(orderForBuyDto.getId());
+        if (businessDto == null) {
+            //TODO
+        }
+
+        if (phone != null && phone.equals(orderForBuyDto.getUsername())) {
+            // 根据手机号获得会员id
+            Long memberId = memberService.getIdByPhone(phone);
+            OrdersDto ordersDto = new OrdersDto();
+            ordersDto.setNum(orderForBuyDto.getNum());
+            ordersDto.setPrice(orderForBuyDto.getPrice());
+            ordersDto.setBusinessId(orderForBuyDto.getId());
+            ordersDto.setMemberId(memberId);
+            ordersService.add(ordersDto);
+            result = new ApiCodeDto(ApiCodeEnum.SUCCESS);
+        }else {
+            result = new ApiCodeDto(ApiCodeEnum.NOT_LOGGED);
+        }
         return result;
     }
 
@@ -147,7 +167,9 @@ public class ApiController {
                 String token = CommonUtil.getUUID();
                 memberService.saveToken(token, phone);
                 // 4.把Token返回给前端
-                result = new ApiCodeDto(ApiCodeEnum.SUCCESS.getErrno(), token);
+                // 4、将这个token返回给前端
+                result = new ApiCodeDto(ApiCodeEnum.SUCCESS);
+                result.setToken(token);
             }else {
                 result = new ApiCodeDto(ApiCodeEnum.CODE_ERROR);
             }
@@ -155,7 +177,7 @@ public class ApiController {
             result = new ApiCodeDto(ApiCodeEnum.CODE_INVALID);
         }
 
-        return null;
+        return result;
     }
 
     /**

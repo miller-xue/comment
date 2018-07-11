@@ -1,5 +1,10 @@
 package com.miller.constant;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum ApiCodeEnum {
     SUCCESS(0,"ok"),
     USER_NOT_EXISTS(1,"用户不存在！"),
@@ -14,16 +19,4 @@ public enum ApiCodeEnum {
     private Integer errno;
     private String msg;
     
-    ApiCodeEnum(Integer errno,String msg) {
-	this.errno = errno;
-	this.msg = msg;
-    }
-
-    public Integer getErrno() {
-        return errno;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
 }

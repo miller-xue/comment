@@ -18,9 +18,9 @@ public class TokenCache {
     public static TokenCache getInstance() {
 	if (instance == null) {
 	    synchronized (TokenCache.class) {
-		if (instance == null) {
+		    if (instance == null) {
 		    instance = new TokenCache();
-		}
+		    }
 	    }
 	}
 	return instance;
@@ -32,7 +32,13 @@ public class TokenCache {
      * @param phone 手机号
      */
     public void save(String token, Long phone) {
-	    tokenMap.put(token, phone);
+        if (!tokenMap.containsKey(token)) {
+            synchronized (TokenCache.class) {
+                if (!tokenMap.containsKey(token)) {
+                    tokenMap.put(token, phone);
+                }
+            }
+        }
     }
 
     /**

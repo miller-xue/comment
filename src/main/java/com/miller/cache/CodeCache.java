@@ -33,16 +33,15 @@ public class CodeCache {
 	 * @return true：保存成功，false：保存失败，手机号已存在
 	 */
 	public boolean save(Long phone,String code) {
-		if (codeMap.containsKey(phone)) {
+		if (!codeMap.containsKey(phone)) {
 			//方法在这里，被锁
 			synchronized (CodeCache.class) {
 				//1个人进去,设置了KEy
 				if (!codeMap.containsKey(phone)) {
 					codeMap.put(phone, code);
-					return true;
 				}
-				return false;
 			}
+			return true;
 		}
 		return false;
 	}

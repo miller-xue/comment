@@ -48,3 +48,15 @@ CREATE TABLE `member` (
   UNIQUE KEY `phone_unique`(`phone`),
   UNIQUE KEY `name_unique`(`name`)
 )ENGINE = InnoDB DEFAULT CHARSET=utf8
+
+
+-- 订单表
+CREATE TABLE  `orders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `business_id` int(11) DEFAULT NULL  COMMENT '商户主键',
+  `member_id` int(11) DEFAULT NULL  COMMENT '会员主键',
+  `num` int(11) DEFAULT NULL  COMMENT '消费人数',
+  `comment_state` int(1) DEFAULT NULL COMMENT '评论状态, -- 0 未评论, 2：已评论',
+  `price` decimal(11,2) DEFAULT NULL COMMENT '价格（消费金额）',
+  PRIMARY KEY (`id`)
+)ENGINE = InnoDB DEFAULT CHARSET=utf8
