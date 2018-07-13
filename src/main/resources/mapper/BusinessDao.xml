@@ -88,4 +88,9 @@
         </where>
         order by id
     </select>
+
+    <update id="updateNumber">
+        update business b,(select business_id,count(*) cou from orders group by business_id) c
+        set b.number = c.cou where b.id = c.business_id
+    </update>
 </mapper>

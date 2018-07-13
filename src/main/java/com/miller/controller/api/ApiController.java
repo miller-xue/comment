@@ -113,9 +113,11 @@ public class ApiController {
      *
      * @return
      */
-    @RequestMapping(value = "/orderlist/:username", method = RequestMethod.GET)
-    public void orderList(@PathVariable(value = "username") String username) {
-
+    @RequestMapping(value = "/orderlist/{username}", method = RequestMethod.GET)
+    public List<OrdersDto> orderList(@PathVariable(value = "username") Long phone) {
+        Long memberId = memberService.getIdByPhone(phone);
+        List<OrdersDto> listByMemberId = ordersService.getListByMemberId(memberId);
+        return listByMemberId;
     }
 
 
@@ -128,13 +130,14 @@ public class ApiController {
     public ApiCodeDto order(OrderForBuyDto orderForBuyDto) {
         ApiCodeDto result = null;
 
-        Long phone = memberService.getPhone(orderForBuyDto.getToken());
+
         // 查询商家
         BusinessDto businessDto = businessService.getById(orderForBuyDto.getId());
         if (businessDto == null) {
             //TODO
         }
-
+        // 校验token是否有效,(缓存中是否存在这样一个TOKEN)
+        Long phone = memberService.getPhone(orderForBuyDto.getToken());
         if (phone != null && phone.equals(orderForBuyDto.getUsername())) {
             // 根据手机号获得会员id
             Long memberId = memberService.getIdByPhone(phone);

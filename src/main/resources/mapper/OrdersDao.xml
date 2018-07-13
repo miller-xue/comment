@@ -4,6 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.miller.dao.OrdersDao">
 
+    <resultMap type="com.miller.bean.Orders" id="OrdersResultMap">
+        <id column="id" property="id" />
+        <result column="comment_state" property="commentState" />
+        <result column="price" property="price" />
+        <association property="business" javaType="Business">
+            <result column="img_file_name" property="imgFileName"/>
+            <result column="title" property="title"/>
+            <result column="number" property="number"/>
+        </association>
+        <association property="member" javaType="Member">
+            <result column="phone" property="phone"/>
+        </association>
+    </resultMap>
+
     <insert id="insert" parameterType="com.miller.bean.Orders">
         insert into orders(member_id,business_id,num,comment_state,price)
         values(#{memberId},#{businessId},#{num},#{commentState},#{price})
@@ -11,5 +25,13 @@
 
     <select id="selectById" parameterType="long" resultType="com.miller.bean.Orders">
         select * from orders where id = #{id}
+    </select>
+
+    <select id="select" resultMap="OrdersResultMap">
+        select o.id,o.comment_state,o.price,o.num,b.img_file_name,b.title,b.number
+        from orders o,business b where o.business_id=b.id
+        <if test="memberId != null">
+            and o.member_id = #{memberId}
+        </if>
     </select>
 </mapper>

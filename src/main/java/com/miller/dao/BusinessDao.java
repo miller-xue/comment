@@ -42,4 +42,9 @@ public interface BusinessDao {
 
     List<Business> selectLikeByPage(Business business);
 
+    /**
+     * 更新库存
+     */
+    void updateNumber();
+
 }
